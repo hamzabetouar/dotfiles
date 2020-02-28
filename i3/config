@@ -1,19 +1,8 @@
-###############################
-#      CONFIGURATION I3       #
-###############################
-# Doc : http://i3wm.org/docs/userguide.html
-
 set $mod Mod4
 set $alt Mod1
 
-###############################
-#          APPARENCE          #
-###############################
-# Focus la fenêtre au survol
 focus_follows_mouse yes
-
-# Police à utiliser
-font pango: SFNS Display 10
+font pango: Hack Display 10
 
 # Couleurs
 set_from_resource       $active       active
@@ -21,21 +10,15 @@ set_from_resource       $inactive     secondary
 set_from_resource       $background   background
 set_from_resource       $foreground   foreground
 
-# class			border	    backgr.   	text	       indicat   child_border
-client.focused          $background #222D32     $foreground    #FFCC66   $active
-client.focused_inactive $background #222D32 	$foreground    #484e50   $inactive
-client.unfocused        $background #182125     $inactive      #292d2e   $inactive
-client.urgent           $active     $active    	$background    #900000   $active
-client.placeholder      $background $background $foreground    #000000   $inactive
-client.background       $background
+# class                 border  backgr. text    indicator child_border
+client.focused          #2b83a6 #2b83a6 #ffffff #dddddd   #2b83a6
+client.focused_inactive #212121 #212121 #86888c #292d2e   #5a5a5a
+client.unfocused        #212121 #212121 #86888c #292d2e   #5a5a5a
+client.urgent           #d64e4e #d64e4e #ffffff #d64e4e   #d64e4e
+client.placeholder      #212121 #0c0c0c #ffffff #212121   #262626
+client.background       #212121
 
-# Fond d'écran
-exec_always --no-startup-id feh --bg-scale ~/Pictures/wallpapers/default.png
 
-###############################
-#         KEYBINDING          #
-###############################
-# Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
 # kill focused window
@@ -44,27 +27,13 @@ bindsym $alt+F4 kill
 bindsym $mod+Shift+Q kill
 
 
-# thin borders
 hide_edge_borders both
 
-# Before i3 v4.8, we used to recommend this one as the default:
-# font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
-# The font above is very space-efficient, that is, it looks good, sharp and
-# clear in small sizes. However, its unicode glyph coverage is limited, the old
-# X core fonts rendering does not support right-to-left and this being a bitmap
-# font, it doesn’t scale on retina/hidpi displays.
-
-# start a terminal
 bindsym $mod+Return exec urxvt
 
-# start dmenu (a program launcher)
-# bindsym $mod+d exec dmenu_run
-# There also is the (new) i3-dmenu-desktop which only displays applications
-# shipping a .desktop file. It is a wrapper around dmenu, so you need that
-# installed.
 
-bindsym $mod+d exec rofi -show drun -display-run ":"
-bindsym $mod+Shift+d exec rofi -show run -display-run ":"
+bindsym $mod+d exec rofi -show drun -display-run ":" -show-icons -drun-icon-theme "Papirus" -font "Fantasque Sans Mono 20"
+bindsym $mod+Shift+d exec rofi -show run -display-run ":" -show-icons -drun-icon-theme "Papirus" -font "Fantasque Sans Mono 20"
 
 
 # change focus
@@ -131,18 +100,18 @@ set $ws6 "6"
 set $ws7 "7"
 set $ws8 "8"
 set $ws9 "9"
-set $monitorLeft   eDP1
-set $monitorRight  DP1
+set $main   eDP1
+set $secondary  HDMI1
+set $secondary  DP1
 
-# Ecran associé à chaque Workspace
-#workspace $ws1 output $monitorRight
-#workspace $ws2 output $monitorRight
-#workspace $ws3 output $monitorRight
-#workspace $ws4 output $monitorRight
-#workspace $ws5 output $monitorLeft
-#workspace $ws6 output $monitorLeft
-#workspace $ws7 output $monitorLeft
-#workspace $ws8 output $monitorLeft
+#workspace $ws1 output $main
+#workspace $ws2 output $main
+#workspace $ws3 output $main
+#workspace $ws4 output $main
+#workspace $ws5 output $main
+#workspace $ws6 output $main
+#workspace $ws7 output $main
+#workspace $ws8 output $main
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
@@ -177,6 +146,21 @@ bindsym $mod+Shift+w exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 
 # lock
 #bindsym $mod+Shift+x exec i3lock --color 475263
+bindsym $mod+Shift+x exec --no-startup-id blurlock
+
+mode "$mode_system" {
+    bindsym l exec --no-startup-id i3exit lock, mode "default"
+    bindsym s exec --no-startup-id i3exit suspend, mode "default"
+    bindsym u exec --no-startup-id i3exit switch_user, mode "default"
+    bindsym e exec --no-startup-id i3exit logout, mode "default"
+    bindsym h exec --no-startup-id i3exit hibernate, mode "default"
+    bindsym r exec --no-startup-id i3exit reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id i3exit shutdown, mode "default"
+
+    # exit system mode: "Enter" or "Escape"
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -204,27 +188,8 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-set $bg-color            #2f343f
-set $inactive-bg-color   #2f343f
-set $text-color          #f3f4f5
-set $inactive-text-color #676e7d
-set $urgent-bg-color     #e53935
-set $indicator-color     #a0a0a0
-
-# set window colors
-#                       border             background         text                 indicator
-client.focused          $bg-color          $bg-color          $text-color          $indicator-color
-client.unfocused        $inactive-bg-color $inactive-bg-color $inactive-text-color $indicator-color
-client.focused_inactive $inactive-bg-color $inactive-bg-color $inactive-text-color $indicator-color
-client.urgent           $urgent-bg-color   $urgent-bg-color   $text-color          $indicator-color
-
-
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
-
 # floating windows
-for_window [class="Pavucontrol"] floating enable
-for_window [class="Kalu"] floating enable
+#for_window [class="Nautilus"] floating enable
 
 ## Multimedia Keys
 
@@ -256,38 +221,47 @@ bindsym $mod+F7 exec mocp --previous
 bindsym $mod+F8 exec mocp --next
 
 # App shortcuts
-bindsym $mod+w exec "/usr/bin/google-chrome-stable"
-bindsym $mod+n exec "/usr/bin/thunar"
-
-# Redirect sound to headphones
-bindsym $mod+ntilde exec "/usr/local/bin/switch-audio-port"
+bindsym $mod+F2 exec google-chrome-stable --enable-logging --v=1
+bindsym $mod+F3 exec nautilus
+bindsym $mod+F4 exec minecraft-launcher
 
 # Autostart apps
-exec --no-startup-id xrandr --output eDP1 --left-of DP1 --auto
+#exec --no-startup-id xrandr --output eDP1 --left-of DP1 --auto
+#exec --no-startup-id xrandr --output eDP1 --left-of HDMI1 --auto
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-exec --no-startup-id "compton -cC"
 exec --no-startup-id nm-applet
-exec --no-startup-id "nitrogen --restore"
-exec --no-startup-id "sleep 2s && kalu"
+exec --no-startup-id compton
+exec --no-startup-id google-chrome-stable --enable-logging --v=1
+#exec --no-startup-id discord 
+exec --no-startup-id telegram-desktop 
+#exec --no-startup-id whatsapp-nativefier-dark
+exec --no-startup-id mailspring
+#exec --no-startup-id evolution
+#exec --no-startup-id geary 
 
 
-# Désactive capslock 
-exec --no-startup-id setxkbmap -option caps:none
+# capslock 
+#exec --no-startup-id setxkbmap -option caps:none
 
 # I3 Gaps
-for_window [class="^.*"] border pixel 2
+for_window [class="^.*"] border pixel 1
 for_window [class=".*"] title_format "  %title"
-gaps inner 7
-smart_borders on
-smart_gaps on
+gaps left 10
+gaps right 10
+gaps top 2
+gaps bottom 2
+gaps inner 10
 
-# Redémarre polybar quand on redémarre i3
+#smart_borders on
+#smart_gaps on
 
-exec --no-startup-id compton
 
+assign [class="discord|Telegra"]    $ws8
+for_window [class="discord"]           move to workspace $ws8
+for_window [class="Telegram"]           move to workspace $ws8
+assign [class="Mailspring"]                                $ws7
+for_window [class="Mailspring"]           move to workspace $ws7
 
-# Désactive capslock 
-exec --no-startup-id setxkbmap -option caps:none
+exec_always --no-startup-id feh --bg-scale ~/Pictures/wallpapers/default.png
 
-# Redémarre polybar quand on redémarre i3
-exec_always --no-startup-id "killall polybar;polybar -r left & polybar -r right"
+exec_always --no-startup-id "killall polybar;polybar -r main; polybar -r secondary"
